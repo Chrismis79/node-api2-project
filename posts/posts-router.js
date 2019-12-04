@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
         res.status(400).json({ errorMessage: "Please provide title and contents for the post."})
     }else {
     Posts.insert(postData)
-        .then(post => {
+        .then(postData => {
             res.status(201).json(postData);
         })
         .catch(error => {
@@ -36,6 +36,21 @@ router.post('/', (req, res) => {
 });
 
 //POST /api/posts/:id/comments
+router.post('/:id/comments', (req, res) => {
+    const commentData = req.body;
+    if(!commentData.text){
+        res.status(400).json({errorMessage: "Please provide text for the comment."})
+    }else {
+    Posts.insertComment(commentData)
+        .then(commentData => {
+            res.status(201).json(commentData)
+        })
+        .catch(error => {
+            console.log("error adding comment", error);
+            res.status(500).json({error: "There was an error while saving the comment to the database"})
+        })
+    } 
+})
 
 //GET /api/posts/:id
 router.get('/:id', (req, res) => {
@@ -56,6 +71,16 @@ router.get('/:id', (req, res) => {
 })
 
 //GET /api/posts/:id/comments
+router.get('/:id/comments', (req, res) => {
+    Posts.findCommentById(req.params.id)
+    .then(comments => {
+        res.status(200).json(comments);
+    })
+    .catch(error => {
+        console.log("Error on GET api/posts/:id/comments", error);
+        res.status(500).json({error: "The comments information could not be retrieved."})
+    })
+})
 
 //DELETE /api/posts/:id
 

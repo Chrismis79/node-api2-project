@@ -111,7 +111,7 @@ When the client makes a `POST` request to `/api/posts/:id/comments`:
   - return HTTP status code `404` (Not Found).
   - return the following JSON object: `{ message: "The post with the specified ID does not exist." }`.
 
-- If the request body is missing the `text` property:
+- ✅If the request body is missing the `text` property:
 
   - cancel the request.
   - respond with HTTP status code `400` (Bad Request).
@@ -123,7 +123,7 @@ When the client makes a `POST` request to `/api/posts/:id/comments`:
   - return HTTP status code `201` (Created).
   - return the newly created _comment_.
 
-- If there's an error while saving the _comment_:
+- ✅If there's an error while saving the _comment_:
   - cancel the request.
   - respond with HTTP status code `500` (Server Error).
   - return the following JSON object: `{ error: "There was an error while saving the comment to the database" }`.
@@ -154,7 +154,7 @@ When the client makes a `GET` request to `/api/posts/:id/comments`:
   - return HTTP status code `404` (Not Found).
   - return the following JSON object: `{ message: "The post with the specified ID does not exist." }`.
 
-- If there's an error in retrieving the _comments_ from the database:
+-✅ If there's an error in retrieving the _comments_ from the database:
   - cancel the request.
   - respond with HTTP status code `500`.
   - return the following JSON object: `{ error: "The comments information could not be retrieved." }`.
