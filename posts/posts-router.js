@@ -93,7 +93,7 @@ router.put('/:id', (req, res) => {
     const item = req.body;
     const id = req.params.id;
     
-    if(!item.title || item.contents){
+    if(!item.title || !item.contents){
         res.status(404).json({errorMessage: "Please provide title and contents for the post."})
     }else {
         Posts.update(id, item)
