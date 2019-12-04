@@ -149,7 +149,7 @@ When the client makes a `GET` request to `/api/posts/:id`:
 
 When the client makes a `GET` request to `/api/posts/:id/comments`:
 
-- If the _post_ with the specified `id` is not found:
+-✅ If the _post_ with the specified `id` is not found:
 
   - return HTTP status code `404` (Not Found).
   - return the following JSON object: `{ message: "The post with the specified ID does not exist." }`.

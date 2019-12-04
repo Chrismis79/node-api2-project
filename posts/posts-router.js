@@ -57,7 +57,7 @@ router.get('/:id', (req, res) => {
     const id = req.params.id;
     Posts.findById(id)
         .then(post => {
-            if(post) {
+            if(post.length) {
                 res.status(200).json(post);
             }else{
                 res.status(404).json({ message: "The post with the specified ID does not exist."})
@@ -72,16 +72,62 @@ router.get('/:id', (req, res) => {
 
 //GET /api/posts/:id/comments
 router.get('/:id/comments', (req, res) => {
-    Posts.findCommentById(req.params.id)
+    const id = req.params.id;
+    Posts.findCommentById(id)
     .then(comments => {
+        if(comments.length){
         res.status(200).json(comments);
+        }else {
+            res.status(404).json({message: "The post with the specified ID does not exist."})
+        }
     })
     .catch(error => {
         console.log("Error on GET api/posts/:id/comments", error);
         res.status(500).json({error: "The comments information could not be retrieved."})
     })
+  
 })
 
+//PUT /api/posts/:id
+router.put('/:id', (req, res) => {
+    const item = req.body;
+    const id = req.params.id;
+    
+    if(!item.title || item.contents){
+        res.status(404).json({errorMessage: "Please provide title and contents for the post."})
+    }else {
+        Posts.update(id, item)
+            .then(post => {
+                if(post){
+                    res.status(200).json({...item, id: req.params.id})
+                }else {
+                    res.status(404).json({message: "The post with the specified ID does not exist."})
+                }
+            })
+            .catch(error => {
+                console.log("Error on PUT api/posts/:id", error)
+                res.status(500).json({error: "The post information could not be modified."})
+            });
+    };
+});  
+
 //DELETE /api/posts/:id
+router.delete('/:id', (req, res) => {
+    const id = req.params.id;
+    Posts.remove(id)
+        .then(item => {
+            if(!item){
+                res.send(404).json({message: "The post with the specified ID does not exist." })
+            } else{
+                res.status(200).json({message: "Removed post"})
+                    .catch(error => {
+                        console.log("There was an error on DELETE /api/posts/:id", error);
+                        res.status(500).json({error: "The post could not be removed"})
+                    })
+            }
+        })
+});
+
+
 
 module.exports = router;
